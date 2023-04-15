@@ -18,7 +18,8 @@ window.addEventListener('load', function () {
   const formCrearTarea  = document.querySelector(".nueva-tarea")
   const nuevaTarea = document.querySelector("#nuevaTarea")
 
-  const nombreUsuario = obtenerNombreUsuario()
+  obtenerNombreUsuario()
+  consultarTareas()
 
 
 
@@ -32,10 +33,6 @@ window.addEventListener('load', function () {
       location.replace("./index.html")
       localStorage.clear()
     }
-
-
-
-
   });
 
   /* -------------------------------------------------------------------------- */
@@ -50,7 +47,7 @@ window.addEventListener('load', function () {
         authorization: token,
       }
     }
-    console.log("consultando el usuario")
+    // console.log("consultando el usuario")
     fetch(urlUsuario, settings)
     .then(response => response.json())
     .then(data => {
@@ -59,7 +56,7 @@ window.addEventListener('load', function () {
 
       //renderizar el nombre del usuario
       const userName = document.querySelector(".user-info p")
-      console.log(nombreUsuario)
+      // console.log(nombreUsuario)
       userName.textContent = data.firstName + ' ' + data.lastName
 
     })
@@ -71,10 +68,26 @@ window.addEventListener('load', function () {
   /* -------------------------------------------------------------------------- */
 
   function consultarTareas() {
-    
-    
+    //configurando el settings
+    const settings = {
+      method: "GET",
+      headers: {
+        authorization: token,
+      }
+    }
 
+    console.log("Consultando el usuario...")
+    
+    fetch( urlTareas, settings)
+    .then( response => response.json() )
+    .then( data => {
+      console.log("se obtuvierton los datos")
+      console.table(data)
+      renderizarTareas(data)
+      //botonBorrarTarea()
+      //botonesCambioEstado()
 
+      });
 
   };
 
@@ -84,10 +97,37 @@ window.addEventListener('load', function () {
   /* -------------------------------------------------------------------------- */
 
   formCrearTarea.addEventListener('submit', function (event) {
+    event.preventDefault()
+    //el payload
+    const payload = {
+        description: nuevaTarea.value,
+        completed: false
+    }
+
+    //configurando el settings
+    const settings = {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token,
+      }
+    }
     
-
-
-
+    fetch( urlTareas, settings)
+    .then(response =>{
+      console.log(response)
+      if (response.ok != true){
+          alert("Algun dato es incorrecto")
+      }
+      return response.json()
+    })
+    .then(data => {
+      console.log("La promesa se cumplio")
+      console.log(data)
+                  //Si el servidor respondio con el token....
+      consultarTareas()
+      })
 
   });
 
@@ -96,8 +136,21 @@ window.addEventListener('load', function () {
   /*                  FUNCIÓN 5 - Renderizar tareas en pantalla                 */
   /* -------------------------------------------------------------------------- */
   function renderizarTareas(listado) {
-
-
+    const cajaTareasPendientes = document.querySelector(".tareas-pendientes")
+    const cajaTareasTerminadas = document.querySelector(".tareas-terminadas")
+    //Se formatea la seccion de listas para que no se dupliquen
+    cajaTareasPendientes.innerHTML = ""
+    cajaTareasTerminadas.innerHTML = ""
+      listado.forEach(tarea => {
+        if (!tarea.completed){
+          console.log("tarea incompleta")
+          cajaTareasPendientes.innerHTML += `<li class="tarea"><p class="nombre">${tarea.description}</p></li>` 
+        }else {
+          console.log("tarea completa")
+          cajaTareasTerminadas.innerHTML += `<li >${tarea.description}</li>` 
+        }
+        
+      })
 
 
 
