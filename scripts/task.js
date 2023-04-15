@@ -125,7 +125,7 @@ window.addEventListener('load', function () {
     .then(data => {
       console.log("La promesa se cumplio")
       console.log(data)
-                  //Si el servidor respondio con el token....
+        //Si el servidor respondio con el token....
       consultarTareas()
       })
 
@@ -141,13 +141,32 @@ window.addEventListener('load', function () {
     //Se formatea la seccion de listas para que no se dupliquen
     cajaTareasPendientes.innerHTML = ""
     cajaTareasTerminadas.innerHTML = ""
+
+    const numeroFinalizadas = document.querySelector("#cantidad-finalizadas") 
+    let contador = 0
+
       listado.forEach(tarea => {
+        let fecha = new Date (tarea.createAt)
         if (!tarea.completed){
           console.log("tarea incompleta")
           cajaTareasPendientes.innerHTML += `<li class="tarea"><p class="nombre">${tarea.description}</p></li>` 
         }else {
+          contador++
+          numeroFinalizadas.innerText = contador
           console.log("tarea completa")
-          cajaTareasTerminadas.innerHTML += `<li >${tarea.description}</li>` 
+          cajaTareasTerminadas.innerHTML += `
+          <li class="tarea">
+            <div class="hecha">
+            <i class="fa regular fa-circle-check"></i>
+            </div>
+            <div class="descripcion">
+              <p class="nombre">${tarea.description}</p>
+              <div class="cambios-estados">
+                <button class="change incompleta" id="${tarea.id}"><i class="fa-solid fa-rotate-left"></i></button>
+                <button class="borrar" id="${tarea.id}"><i class="fa-regular fa-trash-can"></i></button>
+              </div>
+            </div>
+          </li>` 
         }
         
       })
