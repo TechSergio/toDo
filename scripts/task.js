@@ -84,7 +84,7 @@ window.addEventListener('load', function () {
       console.log("se obtuvierton los datos")
       console.table(data)
       renderizarTareas(data)
-      //botonBorrarTarea()
+      botonBorrarTarea()
       botonesCambioEstado()
 
       });
@@ -245,8 +245,32 @@ window.addEventListener('load', function () {
   /*                     FUNCIÓN 7 - Eliminar tarea [DELETE]                    */
   /* -------------------------------------------------------------------------- */
   function botonBorrarTarea() {
-   
+    const btnBorrarTarea = document.querySelectorAll(".borrar")
     
+    btnBorrarTarea.forEach( boton => {
+      boton.addEventListener("click", event => {
+        console.log("eliminando estado...")
+        console.log(event)
+
+        const id = event.target.id
+        const url = `${urlTareas}${id}`
+
+        const settings ={
+          method: "DELETE",
+          headers: {
+            'Content-Type': 'application/json',
+            authorization:token,
+          }
+        }
+
+        fetch(url, settings)
+        .then(response => {
+          console.log(response)
+          consultarTareas()
+        })
+        
+      })
+    })
 
     
 
