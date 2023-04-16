@@ -48,10 +48,8 @@ window.addEventListener('load', function () {
     /* -------------------------------------------------------------------------- */
     function realizarLogin(settings) {
 
-        console.log("lanzando la consulta a la api....")
         fetch(`${URL}/users/login`, settings)
         .then(response => {
-            console.log(response)
             //Si la respuesta no es ok, alguno de los datos es erroneo
             if (response.ok!=true){
                 alert("Algun dato es incorrecto")
@@ -59,12 +57,9 @@ window.addEventListener('load', function () {
             return response.json()
         })
         .then(data =>{
-            console.log("La promesa se cumplio")
-            console.log(data)
             
             //Si el servidor respondio con el token....
             if (data.jwt){
-                console.log(data)
                 localStorage.setItem("jwt",JSON.stringify(data.jwt));
                 location.replace("./mis-tareas.html")
             }

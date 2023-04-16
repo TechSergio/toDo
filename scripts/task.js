@@ -47,16 +47,11 @@ window.addEventListener('load', function () {
         authorization: token,
       }
     }
-    // console.log("consultando el usuario")
     fetch(urlUsuario, settings)
     .then(response => response.json())
     .then(data => {
-      // console.log("Nombre de usuario")
-      console.log(data)
-
       //renderizar el nombre del usuario
       const userName = document.querySelector(".user-info p")
-      // console.log(nombreUsuario)
       userName.textContent = data.firstName + ' ' + data.lastName
 
     })
@@ -75,14 +70,10 @@ window.addEventListener('load', function () {
         authorization: token,
       }
     }
-
-    console.log("Consultando el usuario...")
     
     fetch( urlTareas, settings)
     .then( response => response.json() )
     .then( data => {
-      console.log("se obtuvierton los datos")
-      console.table(data)
       renderizarTareas(data)
       botonBorrarTarea()
       botonesCambioEstado()
@@ -116,15 +107,12 @@ window.addEventListener('load', function () {
     
     fetch( urlTareas, settings)
     .then(response =>{
-      console.log(response)
       if (response.ok != true){
           alert("Algun dato es incorrecto")
       }
       return response.json()
     })
     .then(data => {
-      console.log("La promesa se cumplio")
-      console.log(data)
         //Si el servidor respondio con el token....
       consultarTareas()
       })
@@ -153,7 +141,6 @@ window.addEventListener('load', function () {
       listado.forEach(tarea => {
         let fecha = new Date (tarea.createdAt)
         if (!tarea.completed){
-          console.log("tarea incompleta")
           cajaTareasPendientes.innerHTML += `
           <li class="tarea">
             <button class="change" id="${tarea.id}"><i class="fa-regular fa-circle"></i></button>
@@ -165,7 +152,6 @@ window.addEventListener('load', function () {
         }else {
           contador++
           numeroFinalizadas.innerText = contador
-          console.log("tarea completa")
           cajaTareasTerminadas.innerHTML += `
           <li class="tarea">
             <div class="hecha">
@@ -197,8 +183,6 @@ window.addEventListener('load', function () {
     btnCambioEstado.forEach(boton => {
 
       boton.addEventListener("click", event => {
-        console.log("cambiando estado...")
-        console.log(event)
 
         const id = event.target.id
         const url = `${urlTareas}${id}`
@@ -224,7 +208,6 @@ window.addEventListener('load', function () {
     
         fetch(url, settings)
         .then(response => {
-          console.log(response.status)
           consultarTareas()
         })
 
@@ -249,8 +232,6 @@ window.addEventListener('load', function () {
     
     btnBorrarTarea.forEach( boton => {
       boton.addEventListener("click", event => {
-        console.log("eliminando estado...")
-        console.log(event)
 
         const id = event.target.id
         const url = `${urlTareas}${id}`
@@ -265,10 +246,9 @@ window.addEventListener('load', function () {
 
         fetch(url, settings)
         .then(response => {
-          console.log(response)
           consultarTareas()
         })
-        
+
       })
     })
 

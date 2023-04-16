@@ -48,19 +48,14 @@ window.addEventListener('load', function () {
 
         fetch(`${URL}/users`, settings)
         .then(response =>{
-            console.log(response)
             if (response.ok != true){
                 alert("Algun dato es incorrecto")
             }
             return response.json()
         })
         .then(data => {
-            console.log("La promesa se cumplio")
-            console.log(data)
-
                         //Si el servidor respondio con el token....
             if (data.jwt){
-                console.log(data)
                 localStorage.setItem("jwt",JSON.stringify(data.jwt));
                 location.replace("./mis-tareas.html")
             }
