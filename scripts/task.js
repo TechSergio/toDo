@@ -85,7 +85,7 @@ window.addEventListener('load', function () {
       console.table(data)
       renderizarTareas(data)
       //botonBorrarTarea()
-      //botonesCambioEstado()
+      botonesCambioEstado()
 
       });
 
@@ -174,7 +174,7 @@ window.addEventListener('load', function () {
             <div class="descripcion">
               <p class="nombre">${tarea.description}</p>
               <div class="cambios-estados">
-                <button class="change incompleta" id="${tarea.id}"><i class="fa-solid fa-rotate-left"></i></button>
+                <button class="change completa" id="${tarea.id}"><i class="fa-solid fa-rotate-left"></i></button>
                 <button class="borrar" id="${tarea.id}"><i class="fa-regular fa-trash-can"></i></button>
               </div>
             </div>
@@ -184,16 +184,55 @@ window.addEventListener('load', function () {
       })
       numeroFinalizadas.innerText = contador
 
-
-
-
-
   };
+
+
 
   /* -------------------------------------------------------------------------- */
   /*                  FUNCIÓN 6 - Cambiar estado de tarea [PUT]                 */
   /* -------------------------------------------------------------------------- */
   function botonesCambioEstado() {
+    const btnCambioEstado = document.querySelectorAll(".change")
+    
+    btnCambioEstado.forEach(boton => {
+
+      boton.addEventListener("click", event => {
+        console.log("cambiando estado...")
+        console.log(event)
+
+        const id = event.target.id
+        const url = `${urlTareas}${id}`
+        const payload = {}
+        
+        //segun el boton que fue clickeado, cambiamos el estado de la tarea
+        if (event.target.classList.contains("completa")){
+          //si esta completa la paso a pendiente
+          payload.completed = false
+        }else {
+          //si no esta completa la paso a completada
+          payload.completed = true
+        }
+    
+        const settings = {
+          method: "PUT",
+          body: JSON.stringify(payload),
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: token,
+          }
+        }
+    
+        fetch(url, settings)
+        .then(response => {
+          console.log(response.status)
+          consultarTareas()
+        })
+
+      })
+      
+
+
+    })
     
     
 
