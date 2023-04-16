@@ -100,7 +100,7 @@ window.addEventListener('load', function () {
     event.preventDefault()
     //el payload
     const payload = {
-        description: nuevaTarea.value,
+        description: nuevaTarea.value.trim(),
         completed: false
     }
 
@@ -128,6 +128,9 @@ window.addEventListener('load', function () {
         //Si el servidor respondio con el token....
       consultarTareas()
       })
+      .catch(error => console.log(error))
+
+      formCrearTarea.reset()
 
   });
 
@@ -142,14 +145,23 @@ window.addEventListener('load', function () {
     cajaTareasPendientes.innerHTML = ""
     cajaTareasTerminadas.innerHTML = ""
 
+    //Contador que aparece en tareas finalizadas
     const numeroFinalizadas = document.querySelector("#cantidad-finalizadas") 
     let contador = 0
 
+    //Renderizacion de cada tarea incompleta.
       listado.forEach(tarea => {
-        let fecha = new Date (tarea.createAt)
+        let fecha = new Date (tarea.createdAt)
         if (!tarea.completed){
           console.log("tarea incompleta")
-          cajaTareasPendientes.innerHTML += `<li class="tarea"><p class="nombre">${tarea.description}</p></li>` 
+          cajaTareasPendientes.innerHTML += `
+          <li class="tarea">
+            <button class="change" id="${tarea.id}"><i class="fa-regular fa-circle"></i></button>
+            <div class="descripcion">
+              <p class="nombre">${tarea.description}</p>
+              <p class="timestamp">${fecha.toLocaleDateString()}</p>
+            </div>
+          </li>` 
         }else {
           contador++
           numeroFinalizadas.innerText = contador
@@ -170,6 +182,7 @@ window.addEventListener('load', function () {
         }
         
       })
+      numeroFinalizadas.innerText = contador
 
 
 
