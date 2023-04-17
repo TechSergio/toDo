@@ -15,13 +15,18 @@ window.addEventListener('load', function () {
     /* -------------------------------------------------------------------------- */
     form.addEventListener('submit', function (event) {
         event.preventDefault()
+
+        //caja de errores
         const cajaErrores = document.querySelector("#errores")
+
+        //evita el duplicado de la caja
         if (cajaErrores){
             cajaErrores.remove()
         }
 
         let errores = []
 
+        /* ---------------------- Validaciones---------------------- */ 
         if (!validarTexto(inputNombre.value)) {
             errores.push("El nombre debe tener entre 3 y 50 caracteres, y no tener caracteres especiales")
         }
@@ -42,12 +47,13 @@ window.addEventListener('load', function () {
             errores.push("Las contrasenias deben coincidir")
         }
 
+        /* ---------------------- Comprueba que existan errores antes del envio---------------------- */ 
         if (errores.length == 0){
-            //Objeto que me pide la API al momento del registro
+            //Se normalizan los datos antes de enviarlos
             const payload = {
-                firstName: inputNombre.value,
-                lastName: inputApellido.value,
-                email: inputEmail.value,
+                firstName: normalizarTexto(inputNombre.value),
+                lastName: normalizarTexto(inputApellido.value),
+                email: normalizarEmail(inputEmail.value),
                 password: inputPassword.value
             }
 
@@ -64,8 +70,6 @@ window.addEventListener('load', function () {
             form.reset
         } else {
             //crear caja de error
-            console.log("Hay errores")
-            console.log(errores)
             renderizarErrores(errores)
             
             
@@ -86,7 +90,7 @@ window.addEventListener('load', function () {
             return response.json()
         })
         .then(data => {
-                        //Si el servidor respondio con el token....
+            //Si el servidor respondio con el token....
             if (data.jwt){
                 localStorage.setItem("jwt",JSON.stringify(data.jwt));
                 location.replace("./mis-tareas.html")

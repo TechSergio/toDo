@@ -8,17 +8,15 @@ window.addEventListener('load', function () {
     const URL = "https://todo-api.ctd.academy/v1"
 
 
-
-
     /* -------------------------------------------------------------------------- */
     /*            FUNCIÓN 1: Escuchamos el submit y preparamos el envío           */
     /* -------------------------------------------------------------------------- */
     form.addEventListener('submit', function (event) {
         event.preventDefault()
 
-        //Objeto que me pide la API al momento del logueo
+        //Se normaliza el Email antes de intentar loguearse
         const payload = {
-            email: inputEmail.value,
+            email: normalizarEmail(inputEmail.value),
             password: inputPassword.value,
         }
 
@@ -35,10 +33,6 @@ window.addEventListener('load', function () {
         //Usamos la funcion que hara uso del fetch
         realizarLogin(settings)
         form.reset()
-
-        
-
-
 
     });
 

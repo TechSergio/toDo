@@ -15,7 +15,7 @@ function validarTexto(texto) {
 
 function normalizarTexto(texto) {
     //Pasar formato de texto al correcto, empezando con mayuscula y continuando con minuscula
-    return texto.chatAt(0).toUpperCase() + cadena.slice(1)
+    return texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase()
 }
 
 /* ---------------------------------- email --------------------------------- */
@@ -23,7 +23,6 @@ function validarEmail(email) {
     const expRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
     if (expRegular.test(email)){
-        console.log("correo correcto")
         return true
     }
     return false
@@ -31,7 +30,7 @@ function validarEmail(email) {
 }
 
 function normalizarEmail(email) {
-    
+    return email.toUpperCase()
 }
 
 /* -------------------------------- password -------------------------------- */

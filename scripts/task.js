@@ -5,7 +5,6 @@
   }
   
 
-
 /* ------ comienzan las funcionalidades una vez que carga el documento ------ */
 window.addEventListener('load', function () {
 
@@ -235,7 +234,7 @@ window.addEventListener('load', function () {
 
         const id = event.target.id
         const url = `${urlTareas}${id}`
-
+        
         const settings ={
           method: "DELETE",
           headers: {
@@ -243,7 +242,6 @@ window.addEventListener('load', function () {
             authorization:token,
           }
         }
-
         fetch(url, settings)
         .then(response => {
           consultarTareas()
@@ -251,8 +249,6 @@ window.addEventListener('load', function () {
 
       })
     })
-
-    
 
   };
 
