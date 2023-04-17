@@ -10,34 +10,66 @@ window.addEventListener('load', function () {
     //variable donde almacenaremos el endpoint base url 
     const URL = "https://todo-api.ctd.academy/v1"
 
-    
-
     /* -------------------------------------------------------------------------- */
     /*            FUNCIÓN 1: Escuchamos el submit y preparamos el envío           */
     /* -------------------------------------------------------------------------- */
     form.addEventListener('submit', function (event) {
         event.preventDefault()
-
-        //Objeto que me pide la API al momento del lregistro
-        const payload = {
-            firstName: inputNombre.value,
-            lastName: inputApellido.value,
-            email: inputEmail.value,
-            password: inputPassword.value
+        const cajaErrores = document.querySelector("#errores")
+        if (cajaErrores){
+            cajaErrores.remove()
         }
 
-        //definimos la configuracion del fetch
-        const settings = {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                'Content-Type': 'application/json'
+        let errores = []
+
+        if (!validarTexto(inputNombre.value)) {
+            errores.push("El nombre debe tener entre 3 y 50 caracteres, y no tener caracteres especiales")
+        }
+
+        if (!validarTexto(inputApellido.value)) {
+            errores.push("El Apellido debe tener entre 3 y 50 caracteres, y no tener caracteres especiales")
+        }
+
+        if (!validarEmail(inputEmail.value)){
+            errores.push("El email no tiene el formato correcto Ej: nombre@dominio.com")
+        }
+
+        if (!validarContrasenia(inputPassword.value)){
+            errores.push("La contrasenias debe contener tener mas de 10 caracteres")
+        }
+
+        if (!compararContrasenias(inputPassword.value, inputPasswordRepetida.value)){
+            errores.push("Las contrasenias deben coincidir")
+        }
+
+        if (errores.length == 0){
+            //Objeto que me pide la API al momento del registro
+            const payload = {
+                firstName: inputNombre.value,
+                lastName: inputApellido.value,
+                email: inputEmail.value,
+                password: inputPassword.value
             }
+
+            //definimos la configuracion del fetch
+            const settings = {
+                method: "POST",
+                body: JSON.stringify(payload),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            realizarRegister(settings)
+            form.reset
+        } else {
+            //crear caja de error
+            console.log("Hay errores")
+            console.log(errores)
+            renderizarErrores(errores)
+            
+            
         }
-
-        realizarRegister(settings)
-        form.reset
-
 
     });
 
@@ -70,4 +102,21 @@ window.addEventListener('load', function () {
     };
 
 
+    /* -------------------------------------------------------------------------- */
+    /*                    FUNCIÓN EXTRA: Renderizar errores                    */
+    /* -------------------------------------------------------------------------- */
+    function renderizarErrores(lista){
+        const divTemplate = document.createElement("div")
+        divTemplate.setAttribute("id", "errores")
+        divTemplate.style ="padding: .5em 1em; color: rgb(226, 232, 24); margin: .5em 0 "
+        
+        lista.forEach(error => {
+            divTemplate.innerHTML += `
+            <p><i class="fa-solid fa-circle-exclamation" style="color: #d52020;"></i> <small>${error}</small> </p><br>
+            `
+        })
+        form.appendChild(divTemplate)
+    }
+
 });
+
